@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="database_path" default="~/.ros/rtabmap.db"/>
+  <arg name="cmd_vel_topic" default="/cmd_vel" />
+  <arg name="odom_topic" default="/odom" />
+  <!--
+  <include file="$(find orihime_t)/launch/orihime_gazebo.launch"/>
+  -->
+    
+    <node name="rtabmap" pkg="rtabmap_slam" type="rtabmap" output="screen">
+      <!--<param name="rtabmap_args" value="delete_db_on_start"/>-->
+      
+      <param name="frame_id"            type="string" value="base_link"/>
+      
+      <param name="subscribe_rgb"   type="bool" value="false"/>
+      <param name="subscribe_depth" type="bool" value="false"/>
+      <param name="subscribe_rgbd" type="bool" value="true"/>
+      <param name="subscribe_scan"      type="bool"   value="true"/>
+      <param name="subscribe_scan_cloud" type="bool" value="true"/>
+      <param name="approx_sync"         type="bool"   value="true"/>
+
+      <!--use actionlib to send goals to move_base -->
+      <param name="use_action_for_goal" type="bool" value="true"/>
+      <remap from="move_base"            to="/move_base"/>
+
+      <!-- inputs -->
+      <remap from="scan" to="/scan"/>
+      <remap from="odom" to="/odom"/>
+      <remap from="rgbd_image" to="/rgbd_image"/>
+      <remap from="scan_cloud" to="/camera/depth/color/points"/>
+
+      <!-- output -->
+      <remap from="grid_map" to="/map"/>
+
+      <!-- RTAB-Map's parameters -->
+      <param name="Reg/Strategy"                 type="string" value="1"/>
+      <param name="Reg/Force3DoF"                type="string" value="true"/>
+      <param name="GridGlobal/MinSize"           type="string" value="20"/>
+    </node>
+    
+
+    <node pkg="rtabmap_viz" type="rtabmap_viz" name="rtabmap_viz" args="-d $(find rtabmap_demos)/launch/config/rgbd_gui.ini" output="screen">
+      <param name="subscribe_scan"   type="bool"   value="true"/>
+      <param name="subscribe_odom"   type="bool"   value="true"/>
+      <param name="frame_id"         type="string" value="base_link"/>
+      <param name="approx_sync"      type="bool"   value="true"/>
+
+      <remap from="odom"            to="/odom"/>
+      <remap from="scan"            to="/scan"/>
+    </node>
+    <!--
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+      <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+      <rosparam file="$(find orihime_t)/params/costmap_common_params_orihime.yaml" command="load" ns="global_costmap" />
+      <rosparam file="$(find orihime_t)/params/costmap_common_params_orihime.yaml" command="load" ns="local_costmap" />
+      <rosparam file="$(find orihime_t)/params/local_costmap_params.yaml" command="load" />
+      <rosparam file="$(find orihime_t)/params/global_costmap_params.yaml" command="load" />
+      <rosparam file="$(find orihime_t)/params/move_base_params.yaml" command="load" />
+      <rosparam file="$(find orihime_t)/params/dwa_local_planner_params.yaml" command="load" />
+
+      <param name="global_costmap/global_frame" value="map" />
+      <param name="global_costmap/robot_base_frame" value="base_link" />
+      <param name="local_costmap/laser_scan_sensor/sensor_frame" value="d435i_link" />
+      <param name="local_costmap/laser_scan_sensor/topic" value="scan" />
+      <param name="local_costmap/global_frame" value="odom" />
+      <param name="local_costmap/robot_base_frame" value="base_link" />
+      <remap from="odom" to="odom" />
+    
+      <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+    
+      <param name="DWAPlannerROS/min_vel_x" value="0.0" if="$(arg move_forward_only)" />
+    </node>
+    -->
+
+    <node name="move_base" pkg="move_base" type="move_base" respawn="false" output="screen">
+      <!--
+      <rosparam file="$(find orihime_t)/config/global_costmap_params.yaml" command="load" ns="global_costmap"/>
+      <rosparam file="$(find orihime_t)/config/local_costmap_params.yaml" command="load" ns="local_costmap"/>
+      <rosparam file="$(find orihime_t)/config/costmap_common_params.yaml" command="load" ns="costmap"/>
+      -->
+      <rosparam file="$(find orihime_t)/config/move_base_params_test.yaml" command="load"/>
+      <rosparam file="$(find orihime_t)/config/teb_local_planner_params.yaml" command="load" ns="move_base"/>
+      <param name="base_global_planner" value="global_planner/GlobalPlanner"/>
+      <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS"/>
+    </node>
+
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find turtlebot3_navigation)/rviz/turtlebot3_navigation.rviz"/>
+  <!--
+  <include file="$(find rtabmap_launch)/launch/rtabmap.launch">
+    <arg name="rtabmap_args" value="delete_db_on_start"/>
+    <arg name="frame_id" value="base_link"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="depth_topic" value="/camera/depth/image_raw"/>
+    <arg name="rgb_topic" value="/camera/rgb/image_raw"/>
+    <arg name="approx_sync" value="true"/>
+    
+    <arg name="wait_imu_to_init" value="true"/>
+    
+    <arg name="imu_topic" value="/camera_d435i/imu/sample"/>
+    
+    <arg name="imu_topic" value="/imu/data"/>
+    
+    <param name="subscribe_scan" type="bool" value="true"/>
+
+    <remap from="scan" to="/scan"/>
+    <remap from="odom" to="/odom"/>
+
+    <remap from="rtabmap/rtabmap/grid_map" to="/map"/>
+
+    <param name="Reg/Strategy"                 type="string" value="1"/>
+    <param name="Reg/Force3DoF"                type="string" value="true"/>
+    <param name="GridGlobal/MinSize"           type="string" value="20"/>
+
+    <param name="use_action_for_goal" type="bool" value="true"/>
+    <remap from="move_base" to="/move_base"/>
+
+  </include>
+  -->
+</launch>

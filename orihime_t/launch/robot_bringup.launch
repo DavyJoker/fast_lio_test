@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+    <param name="robot_description" command="cat $(find orihime_t)/urdf/orihime_t_real_copy.urdf"/>
+
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+        <param name="publish_frequency" type="double" value="50.0"/>
+        <param name="tf_prefix" type="string" value=""/>
+    </node>
+
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+
+
+</launch>

@@ -1,0 +1,48 @@
+TebLocalPlannerROS:
+
+  # Trajectory
+  teb_autosize: true
+  dt_ref: 0.3  # Time duration between two consecutive trajectory points
+  dt_hysteresis: 0.1  # Hysteresis for time duration
+  global_plan_overwrite_orientation: true  # Use the global plan orientation
+  max_global_plan_lookahead_dist: 2.0  # Lookahead distance for the global plan
+  feasibility_check_no_poses: 5  # Number of poses to check feasibility
+
+  # Robot
+  max_vel_x: 1.2  # Max linear velocity in m/s
+  max_vel_x_backwards: 0.03  # Max linear velocity backwards in m/s
+  max_vel_theta: 0.7  # Max angular velocity in rad/s
+  acc_lim_x: 1.2 # Max linear acceleration in m/s^2
+  acc_lim_theta: 0.5  # Max angular acceleration in rad/s^2
+  min_turning_radius: 0.0  # Minimum turning radius; zero for differential drive
+  footprint_model:
+    type: "point"  # Simplified model for footprint; "point" or "polygon"
+
+  # Goal Tolerance
+  xy_goal_tolerance: 0.2  # Tolerance for reaching the goal position in meters
+  yaw_goal_tolerance: 0.2  # Tolerance for reaching the goal orientation in radians
+  free_goal_vel: false  # Whether to allow free velocity at the goal
+
+  # Obstacles
+  min_obstacle_dist: 0.35  # Minimum distance to obstacles in meters
+  inflation_dist: 0.45  # Inflation distance around obstacles in meters
+  include_costmap_obstacles: true  # Whether to include costmap obstacles
+  costmap_obstacles_behind_robot_dist: 1.0  # Distance behind the robot to include obstacles
+  obstacle_poses_affected: 30  # Number of obstacle poses affected in the costmap
+  include_dynamic_obstacles: true
+  dynamic_obstacle_inflation_dist: 0.1
+
+  # Optimization
+  weight_optimaltime: 1.0  # Weight for optimization time
+  weight_shortest_path: 5.0  # Weight for the shortest path
+  weight_obstacle: 50.0  # Weight for obstacle avoidance
+  weight_dynamic_obstacle: 10.0  # Weight for dynamic obstacles
+  weight_viapoint: 2.0  # Weight for via points
+  weight_velocity: 1.0  # Weight for velocity
+  weight_kinematics_forward_drive: 100.0
+  weight_kinematics_turning_radius: 0.5
+  weight_inflation: 1.0
+
+  # Miscellaneous
+  enable_homotopy_class_planning: true  # Enable planning for different homotopy classes
+  enable_multithreading: true  # Enable multithreading for optimization

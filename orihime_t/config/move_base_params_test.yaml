@@ -1,0 +1,13 @@
+#move_base
+controller_frequency: 15.0
+planner_patience: 2.0
+oscillation_timeout: 5.0
+oscillation_distance: 0.1
+planner_frequency: 5.0
+shutdown_costmaps: false
+conservative_reset_dist: 3.0
+recovery_behavior_enabled: true
+
+#base_global_planner: "global_planner/GlobalPlanner"
+base_global_planner: "navfn/NavfnROS"
+base_local_planner: "teb_local_planner/TebLocalPlannerROS"

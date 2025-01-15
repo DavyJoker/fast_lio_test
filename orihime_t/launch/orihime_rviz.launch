@@ -1,0 +1,14 @@
+<launch>
+    <!-- give the robot_description to the ROS parameters -->
+    
+    <param name="robot_description" command="$(find xacro)/xacro '$(find orihime_t)/urdf/orihime-t-test.urdf.xacro'"/>
+    <!--
+    <param name="robot_description" command="cat $(find orihime_t)urdf/orihime_t.urdf"/>
+    -->
+    <!-- start 3 nodes: joint_state_publisher, robot_state_publisher, rviz -->
+    <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_state_publisher"/>
+
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher"/>
+
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find orihime_t)/rviz/orihime_t.rviz"/>
+</launch>

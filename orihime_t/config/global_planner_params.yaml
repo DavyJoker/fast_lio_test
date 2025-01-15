@@ -1,0 +1,9 @@
+GlobalPlanner:
+  allow_unknown: false  # 确保不生成穿越未知区域的路径
+  default_tolerance: 0.2  # 增加路径的宽容度，允许路径生成稍微偏离目标点
+  cost_factor: 50.0  # 增加代价函数的权重，使路径更加远离障碍物
+  neutral_cost: 170  # 中立代价（调高这个值可使路径远离障碍物）
+  lethal_cost: 253  # 致命代价，贴近障碍物的代价（可以保持默认）
+  orientation_mode: 1  # 路径生成时考虑机器人的朝向
+  publish_potential: true  # 发布潜力场以便调试
+  use_dijkstra: true

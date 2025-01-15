@@ -1,0 +1,24 @@
+# realsense_filters.yaml
+depth:
+  filters:
+    spatial:
+      enabled: true
+      filter_mode: 1  # 0: AVERAGE, 1: MEDIAN
+      smooth_alpha: 0.5
+      smooth_delta: 20.0
+      max_spatial_filtering: true
+
+    temporal:
+      enabled: true
+      depth_change_threshold: 0.02
+      spatial_change_threshold: 0.1
+      filter_mode: 1  # 0: MIN, 1: MAX, 2: MEDIAN
+
+    hole_filling:
+      enabled: true
+      max_hole_size: 100
+      min_hole_size: 10
+
+    average:
+      enabled: true
+      window_size: 5

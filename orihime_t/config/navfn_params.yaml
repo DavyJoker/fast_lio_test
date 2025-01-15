@@ -1,0 +1,7 @@
+NavfnROS:
+  allow_unknown: false
+  planner_window_x: 10.0  # 规划器考虑的窗口大小（横向）
+  planner_window_y: 10.0  # 规划器考虑的窗口大小（纵向）
+  cost_factor: 50.0  # 距离障碍物的代价权重
+  lethal_cost: 253  # 致命代价，类似GlobalPlanner中的设置
+  neutral_cost: 50  # 路径平滑的权重

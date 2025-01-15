@@ -1,0 +1,3 @@
+<launch>
+    <param name="robot_description" command="$(find xacro)/xacro '$(find orihime_t)/urdf/orihime-t-test.urdf.xacro'"/>
+</launch>

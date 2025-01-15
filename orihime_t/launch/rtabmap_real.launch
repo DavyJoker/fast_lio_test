@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="localization" default="false"/>
+
+  <include file="$(find rtabmap_launch)/launch/rtabmap.launch">
+    <!--<arg name="rtabmap_args" value="delete_db_on_start Optimizer/GravitySigma 0.3" />-->
+    <arg name="depth_topic" value="/camera/aligned_depth_to_color/image_raw" />
+    <!--<arg name="depth_topic" value="/camera/aligned_depth_to_color/filtered_image" />-->
+    <arg name="rgb_topic" value="/camera/color/image_raw" />
+    <arg name="camera_info_topic" value="/camera/color/camera_info" />
+
+    <arg name="rgbd_sync" value="true"/>
+    <arg name="approx_sync" value="false" />
+    <arg name="subscribe_rgbd" value="true"/>
+    <arg name="subscribe_scan" value="true"/>
+    
+    <arg name="localization" value="$(arg localization)"/>
+    <arg name="rtabmap_viz" value="false"/>
+  </include>
+  
+  <node name="move_base" pkg="move_base" type="move_base" respawn="false" output="screen">
+    <remap from="map" to="/rtabmap/grid_map"/>
+        
+    <rosparam file="$(find orihime_t)/config/costmap_common_params.yaml" command="load" ns="global_costmap"/>
+    <rosparam file="$(find orihime_t)/config/costmap_common_params.yaml" command="load" ns="local_costmap"/>
+    <rosparam file="$(find orihime_t)/config/global_planner_params.yaml" command="load" />
+    <rosparam file="$(find orihime_t)/config/navfn_params.yaml" command="load" />
+    <rosparam file="$(find orihime_t)/config/global_costmap_params.yaml" command="load"/>
+    <rosparam file="$(find orihime_t)/config/local_costmap_params.yaml" command="load"/>
+    <rosparam file="$(find orihime_t)/config/move_base_params_test.yaml" command="load"/>
+    <rosparam file="$(find orihime_t)/config/teb_local_planner_params.yaml" command="load"/>
+  </node>
+
+  <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find turtlebot3_navigation)/rviz/turtlebot3_navigation.rviz"/>
+
+</launch>
